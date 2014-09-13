@@ -1,0 +1,8 @@
+v1.1.0:
+  - Added: Console commands are supported.
+  - Added: Date field to snapshot.
+  - Added: Showing snapshot's information via console.
+  - Modified: Creating a folder for patch (based on date).
+
+v1.0.0:
+  - First release.

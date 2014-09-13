@@ -5,10 +5,8 @@
 package com.banisaeid.folderdiff.ui;
 
 import javax.swing.border.*;
-import com.banisaeid.folderdiff.DifferenceEntry;
-import com.banisaeid.folderdiff.SnapshotComparer;
-import com.banisaeid.folderdiff.SnapshotDifference;
-import com.banisaeid.folderdiff.SnapshotUtils;
+
+import com.banisaeid.folderdiff.*;
 import com.banisaeid.folderdiff.model.FileInfo;
 import com.banisaeid.folderdiff.model.FileType;
 import com.banisaeid.folderdiff.model.Snapshot;
@@ -28,11 +26,13 @@ import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements Logger{
     private final SimpleDateFormat logDateFormat = new SimpleDateFormat("[HH:mm:ss] ");
+    private Controller controller  = new Controller(this);
 
     public MainFrame() {
         initComponents();
+        setTitle("Folder Diff v" + CommonProps.VERSION);
     }
 
     private void browseInputFolderButtonActionPerformed(ActionEvent e) {
@@ -90,29 +90,7 @@ public class MainFrame extends JFrame {
             return;
         }
 
-        log("Creating snapshot...");
-        Snapshot snapshot;
-        try {
-            String dir = inputFolderTextField.getText();
-            snapshot = SnapshotUtils.make(dir);
-        } catch (Exception e1) {
-            log("Error creating snapshot: %s", e1.getMessage());
-            return;
-        }
-
-        log("Snapshot created. Saving...");
-
-        try {
-            String filePath = snapshotOutputTextField.getText();
-            File file = new File(filePath);
-
-            SnapshotUtils.save(snapshot, FileUtils.openOutputStream(file));
-        } catch (IOException e1) {
-            log("Error saving snapshot: %s", e1.getMessage());
-            return;
-        }
-
-        log("Snapshot saved successfully.");
+        controller.takeSnapshot(inputFolderTextField.getText(), snapshotOutputTextField.getText());
     }
 
     private void browsePatchFolderButtonActionPerformed(ActionEvent e) {
@@ -167,72 +145,9 @@ public class MainFrame extends JFrame {
             return;
         }
 
-        try {
-            if (!checkIfEmpty(patchFolderTextField.getText())){
-                if (JOptionPane.showConfirmDialog(this,
-                        "Patch folder is not empty. Continue?",
-                        "Confirm",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION){
-                    return;
-                }
-            }
-
-            log("Loading snapshot file...");
-            Snapshot destSnapshot = SnapshotUtils.load(new FileInputStream(snapshotInputTextField.getText()));
-            log("Loaded.");
-
-            log("Creating snapshot for source folder...");
-            Snapshot srcSnapshot = SnapshotUtils.make(sourceFolderTextField.getText());
-            log("Done.");
-
-            log("Creating patch...");
-            SnapshotComparer comparer = new SnapshotComparer(srcSnapshot, destSnapshot);
-            SnapshotDifference difference = comparer.compare();
-            makePatch(difference, patchFolderTextField.getText(), true, true);
-            log("Done.");
-
-
-        } catch (Exception e1) {
-            log("Error generating patch: " + e1.getMessage());
-        }
-    }
-
-    private boolean checkIfEmpty(String dir){
-        Collection<File> files = FileUtils.listFilesAndDirs(new File(dir), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-        return files.size() <= 1; // 1 --> root ("")
-    }
-
-    private static void makePatch(SnapshotDifference result, String patchDirectory, boolean addLeftFiles, boolean addDifferences) throws IOException {
-        String leftDir = result.getLeft().getOriginalPath();
-
-        FileUtils.cleanDirectory(new File(patchDirectory));
-
-        if (addLeftFiles) {
-            for (FileInfo fileInfo : result.getOnlyInLeft()) {
-                if (fileInfo.getFileType() == FileType.FILE) {
-                    String relativeName = fileInfo.getRelativeName();
-                    File source = new File(normalizePath(leftDir, relativeName));
-                    File dest = new File(normalizePath(patchDirectory, relativeName));
-                    FileUtils.copyFile(source, dest);
-                }
-            }
-        }
-
-        if (addDifferences) {
-            for (DifferenceEntry differenceEntry : result.getDifferences()) {
-                if (differenceEntry.getLeftEntry().getFileType() == FileType.FILE) {
-                    String relativeName = differenceEntry.getLeftEntry().getRelativeName();
-                    File source = new File(normalizePath(leftDir, relativeName));
-                    File dest = new File(normalizePath(patchDirectory, relativeName));
-                    FileUtils.copyFile(source, dest);
-                }
-            }
-        }
-    }
-
-    private static String normalizePath(String base, String relativePath) {
-        return FilenameUtils.normalize(base + "/" + relativePath);
+        controller.generatePatch(snapshotInputTextField.getText(),
+                sourceFolderTextField.getText(),
+                patchFolderTextField.getText());
     }
 
     private void initComponents() {
@@ -262,7 +177,7 @@ public class MainFrame extends JFrame {
         logTextArea = new JTextArea();
 
         //======== this ========
-        setTitle("Folder Compare");
+        setTitle("Folder Diff");
         Container contentPane = getContentPane();
 
         //======== tabbedPane1 ========
@@ -310,16 +225,19 @@ public class MainFrame extends JFrame {
                     panel1Layout.createParallelGroup()
                         .addGroup(panel1Layout.createSequentialGroup()
                             .addContainerGap()
-                            .addGroup(panel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                .addGroup(panel1Layout.createSequentialGroup()
-                                    .addGroup(panel1Layout.createParallelGroup()
-                                        .addComponent(label2, GroupLayout.Alignment.TRAILING)
-                                        .addComponent(label1, GroupLayout.Alignment.TRAILING))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(panel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(snapshotOutputTextField, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                                        .addComponent(inputFolderTextField, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)))
-                                .addComponent(generateSnapshotButton))
+                            .addGroup(panel1Layout.createParallelGroup()
+                                .addGroup(GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+                                    .addComponent(generateSnapshotButton))
+                                .addGroup(GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                                    .addComponent(label2)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(snapshotOutputTextField, GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE))
+                                .addGroup(GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                                    .addGap(4, 4, 4)
+                                    .addComponent(label1)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(inputFolderTextField, GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)))
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(panel1Layout.createParallelGroup()
                                 .addComponent(browseInputFolderButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
@@ -339,9 +257,9 @@ public class MainFrame extends JFrame {
                                 .addComponent(label2)
                                 .addComponent(snapshotOutputTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(browseOutputButton))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(generateSnapshotButton)
-                            .addContainerGap(60, Short.MAX_VALUE))
+                            .addGap(60, 60, 60))
                 );
             }
             tabbedPane1.addTab("Snapshot", panel1);
@@ -404,23 +322,18 @@ public class MainFrame extends JFrame {
                                 .addComponent(label5, GroupLayout.Alignment.TRAILING)
                                 .addComponent(label4, GroupLayout.Alignment.TRAILING)
                                 .addComponent(label3, GroupLayout.Alignment.TRAILING))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(panel2Layout.createParallelGroup()
-                                .addGroup(panel2Layout.createSequentialGroup()
-                                    .addComponent(snapshotInputTextField, GroupLayout.PREFERRED_SIZE, 281, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(browseSnapshotInputButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panel2Layout.createSequentialGroup()
-                                    .addComponent(sourceFolderTextField, GroupLayout.PREFERRED_SIZE, 281, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(browseSourceFolderButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panel2Layout.createSequentialGroup()
-                                    .addGroup(panel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                        .addComponent(generatePatchButton)
-                                        .addComponent(patchFolderTextField, GroupLayout.PREFERRED_SIZE, 281, GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(browsePatchFolderButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)))
-                            .addContainerGap(53, Short.MAX_VALUE))
+                                .addComponent(generatePatchButton, GroupLayout.Alignment.TRAILING)
+                                .addComponent(patchFolderTextField, GroupLayout.Alignment.TRAILING)
+                                .addComponent(sourceFolderTextField, GroupLayout.Alignment.TRAILING)
+                                .addComponent(snapshotInputTextField, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(panel2Layout.createParallelGroup()
+                                .addComponent(browseSnapshotInputButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(browseSourceFolderButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(browsePatchFolderButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+                            .addGap(53, 53, 53))
                 );
                 panel2Layout.setVerticalGroup(
                     panel2Layout.createParallelGroup()
@@ -440,9 +353,9 @@ public class MainFrame extends JFrame {
                                 .addComponent(label5)
                                 .addComponent(patchFolderTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(browsePatchFolderButton))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(generatePatchButton)
-                            .addContainerGap(30, Short.MAX_VALUE))
+                            .addGap(30, 30, 30))
                 );
             }
             tabbedPane1.addTab("Patch", panel2);
@@ -485,26 +398,27 @@ public class MainFrame extends JFrame {
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                    .addGroup(contentPaneLayout.createParallelGroup()
                         .addComponent(tabbedPane1)
                         .addComponent(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap(14, Short.MAX_VALUE))
+                    .addGap(14, 14, 14))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tabbedPane1)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(10, Short.MAX_VALUE))
+                    .addComponent(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(10, 10, 10))
         );
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    private void log(String format, Object ... args){
+    @Override
+    public void log(String format, Object... args){
         String date = logDateFormat.format(new Date());
         String msg = String.format(format, args);
         logTextArea.append(date + msg + "\n");

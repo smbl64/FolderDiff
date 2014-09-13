@@ -1,4 +1,4 @@
-package com.banisaeid.folderdiff;
+package com.banisaeid.folderdiff.core;
 
 import com.banisaeid.folderdiff.model.FileInfo;
 

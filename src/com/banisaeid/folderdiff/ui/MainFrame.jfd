@@ -4,16 +4,16 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {space :::p, par l:::p {comp tabbedPane1:::::x, comp panel3:::::x}, space ::14:x}}"
-			"$verticalGroup": "par l {seq l {space :::p, comp tabbedPane1:::p:174:p, space :::p, comp panel3:::p::p, space ::10:x}}"
+			"$horizontalGroup": "par l {seq {space :p::p, par l {comp tabbedPane1:::::x, comp panel3:::::x}, space :p:14:p}}"
+			"$verticalGroup": "par l {seq l {space :p::p, comp tabbedPane1:::::x, space :p::p, comp panel3:::::x, space :p:10:p}}"
 		} ) {
 			name: "this"
-			"title": "Folder Compare"
+			"title": "Folder Diff"
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :::p, par t {seq {par l {comp label2::t:p::p, comp label1::t:p::p}, space s:::p, par l:::p {comp snapshotOutputTextField::::281:x, comp inputFolderTextField::::281:x}}, comp generateSnapshotButton:::p::p}, space :::p, par l {comp browseInputFolderButton:::p:25:p, comp browseOutputButton:::p:25:p}, space ::85:x}}"
-					"$verticalGroup": "par l {seq {space :::p, par b {comp label1::b:p::p, comp browseInputFolderButton::b:p::p, comp inputFolderTextField::b:p::p}, space :p:5:p, par b {comp label2::b:p::p, comp snapshotOutputTextField::b:p::p, comp browseOutputButton::b:p::p}, space :::p, comp generateSnapshotButton:::p::p, space ::60:x}}"
+					"$horizontalGroup": "par l {seq l {space :::p, par l {seq t {space ::260:x, comp generateSnapshotButton:::p::p}, seq t {comp label2:::p::p, space :::p, comp snapshotOutputTextField::::293:x}, seq t {space :4:4:4, comp label1:::p::p, space :::p, comp inputFolderTextField::::293:x}}, space :::p, par l {comp browseInputFolderButton:::p:25:p, comp browseOutputButton:::p:25:p}, space ::85:x}}"
+					"$verticalGroup": "par l {seq {space :::p, par b {comp label1::b:p::p, comp browseInputFolderButton::b:p::p, comp inputFolderTextField::b:p::p}, space :p:5:p, par b {comp label2::b:p::p, comp snapshotOutputTextField::b:p::p, comp browseOutputButton::b:p::p}, space :::x, comp generateSnapshotButton:::p::p, space :p:60:p}}"
 				} ) {
 					name: "panel1"
 					add( new FormComponent( "javax.swing.JTextField" ) {
@@ -49,8 +49,8 @@ new FormModel {
 					"title": "Snapshot"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :p:18:p, par l {comp label5::t:p::p, comp label4::t:p::p, comp label3::t:p::p}, space :::x, par l {seq l {comp snapshotInputTextField:::p:281:p, space :::p, comp browseSnapshotInputButton:::p:25:p}, seq l {comp sourceFolderTextField:::p:281:p, space :::p, comp browseSourceFolderButton:::p:25:p}, seq l {par t {comp generatePatchButton:::p::p, comp patchFolderTextField:::p:281:p}, space :::p, comp browsePatchFolderButton:::p:25:p}}, space ::53:x}}"
-					"$verticalGroup": "par l {seq l {space :::p, par b {comp snapshotInputTextField::b:p::p, comp label3::b:p::p, comp browseSnapshotInputButton::b:p::p}, space :::p, par b {comp sourceFolderTextField::b:p::p, comp label4::b:p::p, comp browseSourceFolderButton::b:p::p}, space :::p, par b {comp label5::b:p::p, comp patchFolderTextField::b:p::p, comp browsePatchFolderButton::b:p::p}, space :::p, comp generatePatchButton:::p::p, space ::30:x}}"
+					"$horizontalGroup": "par l {seq l {space :p:18:p, par l {comp label5::t:p::p, comp label4::t:p::p, comp label3::t:p::p}, space :p::p, par l {comp generatePatchButton::t:p::p, comp patchFolderTextField::t:::x, comp sourceFolderTextField::t:::x, comp snapshotInputTextField::t::281:x}, space :p::p, par l {comp browseSnapshotInputButton::l:p:25:p, comp browseSourceFolderButton::l:p:25:p, comp browsePatchFolderButton::l:p:25:p}, space :p:53:p}}"
+					"$verticalGroup": "par l {seq l {space :::p, par b {comp snapshotInputTextField::b:p::p, comp label3::b:p::p, comp browseSnapshotInputButton::b:p::p}, space :::p, par b {comp sourceFolderTextField::b:p::p, comp label4::b:p::p, comp browseSourceFolderButton::b:p::p}, space :::p, par b {comp label5::b:p::p, comp patchFolderTextField::b:p::p, comp browsePatchFolderButton::b:p::p}, space :::x, comp generatePatchButton:::p::p, space :p:30:p}}"
 				} ) {
 					name: "panel2"
 					add( new FormComponent( "javax.swing.JLabel" ) {

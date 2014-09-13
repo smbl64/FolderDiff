@@ -1,18 +1,10 @@
-package com.banisaeid.folderdiff;
-
-import com.banisaeid.folderdiff.ui.MainFrame;
+package com.banisaeid.folderdiff.ui;
 
 import javax.swing.*;
 import java.io.IOException;
 
-public class RunUI {
-    public static void main(String[] args) {
-        // TODO command line options without UI
-        new RunUI().start();
-    }
-
-    private void start() {
-
+public class GuiMain {
+    public void start() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -37,4 +29,5 @@ public class RunUI {
         frame.pack();
         frame.setVisible(true);
     }
+
 }

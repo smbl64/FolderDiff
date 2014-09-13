@@ -1,4 +1,4 @@
-package com.banisaeid.folderdiff;
+package com.banisaeid.folderdiff.core;
 
 import com.banisaeid.folderdiff.model.FileInfo;
 import com.banisaeid.folderdiff.model.FileType;
@@ -10,6 +10,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.Date;
 
 public class SnapshotUtils implements Serializable {
     public static Snapshot make(String basePath) throws NoSuchAlgorithmException, IOException {
@@ -35,6 +36,8 @@ public class SnapshotUtils implements Serializable {
         }
 
         snapshot.setOriginalPath(basePath);
+        snapshot.setDate(new Date());
+
         return snapshot;
     }
 

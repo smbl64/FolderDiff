@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Snapshot implements Serializable {
+    private Date date;
     private String originalPath;
     private List<FileInfo> fileInfos;
 
@@ -25,6 +26,14 @@ public class Snapshot implements Serializable {
 
     public void setFileInfos(List<FileInfo> fileInfos) {
         this.fileInfos = fileInfos;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public FileInfo find(FileInfo item){

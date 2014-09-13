@@ -1,9 +1,9 @@
 package com.banisaeid.folderdiff.test;
 
-import com.banisaeid.folderdiff.DifferenceEntry;
-import com.banisaeid.folderdiff.SnapshotComparer;
-import com.banisaeid.folderdiff.SnapshotDifference;
-import com.banisaeid.folderdiff.SnapshotUtils;
+import com.banisaeid.folderdiff.core.DifferenceEntry;
+import com.banisaeid.folderdiff.core.SnapshotComparer;
+import com.banisaeid.folderdiff.core.SnapshotDifference;
+import com.banisaeid.folderdiff.core.SnapshotUtils;
 import com.banisaeid.folderdiff.model.FileInfo;
 import com.banisaeid.folderdiff.model.FileType;
 import com.banisaeid.folderdiff.model.Snapshot;
