@@ -1,0 +1,121 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.7.0_40" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :::p, par l:::p {comp tabbedPane1:::::x, comp panel3:::::x}, space ::14:x}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp tabbedPane1:::p:174:p, space :::p, comp panel3:::p::p, space ::10:x}}"
+		} ) {
+			name: "this"
+			"title": "Folder Compare"
+			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "tabbedPane1"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {seq l {space :::p, par t {seq {par l {comp label2::t:p::p, comp label1::t:p::p}, space s:::p, par l:::p {comp snapshotOutputTextField::::281:x, comp inputFolderTextField::::281:x}}, comp generateSnapshotButton:::p::p}, space :::p, par l {comp browseInputFolderButton:::p:25:p, comp browseOutputButton:::p:25:p}, space ::85:x}}"
+					"$verticalGroup": "par l {seq {space :::p, par b {comp label1::b:p::p, comp browseInputFolderButton::b:p::p, comp inputFolderTextField::b:p::p}, space :p:5:p, par b {comp label2::b:p::p, comp snapshotOutputTextField::b:p::p, comp browseOutputButton::b:p::p}, space :::p, comp generateSnapshotButton:::p::p, space ::60:x}}"
+				} ) {
+					name: "panel1"
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputFolderTextField"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "browseInputFolderButton"
+						"text": "..."
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseInputFolderButtonActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+						"text": "Folder:"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "Output:"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "snapshotOutputTextField"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "browseOutputButton"
+						"text": "..."
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseOutputButtonActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "generateSnapshotButton"
+						"text": "Generate"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "generateSnapshotButtonActionPerformed", true ) )
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Snapshot"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {seq l {space :p:18:p, par l {comp label5::t:p::p, comp label4::t:p::p, comp label3::t:p::p}, space :::x, par l {seq l {comp snapshotInputTextField:::p:281:p, space :::p, comp browseSnapshotInputButton:::p:25:p}, seq l {comp sourceFolderTextField:::p:281:p, space :::p, comp browseSourceFolderButton:::p:25:p}, seq l {par t {comp generatePatchButton:::p::p, comp patchFolderTextField:::p:281:p}, space :::p, comp browsePatchFolderButton:::p:25:p}}, space ::53:x}}"
+					"$verticalGroup": "par l {seq l {space :::p, par b {comp snapshotInputTextField::b:p::p, comp label3::b:p::p, comp browseSnapshotInputButton::b:p::p}, space :::p, par b {comp sourceFolderTextField::b:p::p, comp label4::b:p::p, comp browseSourceFolderButton::b:p::p}, space :::p, par b {comp label5::b:p::p, comp patchFolderTextField::b:p::p, comp browsePatchFolderButton::b:p::p}, space :::p, comp generatePatchButton:::p::p, space ::30:x}}"
+				} ) {
+					name: "panel2"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label3"
+						"text": "Snapshot:"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "snapshotInputTextField"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "browseSnapshotInputButton"
+						"text": "..."
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseSnapshotInputButtonActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label4"
+						"text": "Source Folder:"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "sourceFolderTextField"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "browseSourceFolderButton"
+						"text": "..."
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseSourceFolderButtonActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label5"
+						"text": "Patch Folder:"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "patchFolderTextField"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "browsePatchFolderButton"
+						"text": "..."
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browsePatchFolderButtonActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "generatePatchButton"
+						"text": "Generate Patch"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "generatePatchButtonActionPerformed", true ) )
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Patch"
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq l {space :::p, comp scrollPane1:::::x, space :::p}}"
+				"$verticalGroup": "par l {seq l {space :::p, comp scrollPane1::::118:x, space :::p}}"
+			} ) {
+				name: "panel3"
+				"border": new javax.swing.border.TitledBorder( "Log" )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane1"
+					add( new FormComponent( "javax.swing.JTextArea" ) {
+						name: "logTextArea"
+						"editable": false
+						"font": new java.awt.Font( "Courier New", 0, 12 )
+					} )
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 500, 385 )
+		} )
+	}
+}
