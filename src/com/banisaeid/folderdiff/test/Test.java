@@ -17,10 +17,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class Test {
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
-//        String leftDir = "D:\\Projects Data\\USSD Generic\\UssdServerSimulator_R3";
-//        String rightDir = "D:\\Projects Data\\USSD Generic\\UssdServer_R3";
-        String leftDir = "D:\\Projects Data\\Maskan Bank\\USSD Server\\Update (2014-05-17) 2";
-        String rightDir = "D:\\Projects Data\\Maskan Bank\\USSD Server\\Update (2014-04-28)";
+        String leftDir = "D:\\Projects Data\\Left";
+        String rightDir = "D:\\Projects Data\\Right";
 
         System.out.println("making snapshot 1...");
         Snapshot left = SnapshotUtils.make(leftDir);
